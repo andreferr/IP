@@ -1,82 +1,72 @@
 package com.company;
 import java.util.*;
-import java.math.*;
 public class Main {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-
-        int lotacao = Integer.parseInt(in.nextLine()), pessoas = 0, fila = 0, filaentrou = 0, nvip = 0, nvipentrou = 0;
-
-        while(in.hasNext()) {
-            String movimentacao = in.next(), tipo = in.next();
-
-            if (tipo.equals("VIP")) {
-                pessoas++;
-                System.out.println("1 pessoas entraram na casa. Atualmente ha "+pessoas+" pessoas no evento.");
+        int tamanhoalvo = Integer.parseInt(in.nextLine());
+        int[] alvopontos = new int[tamanhoalvo];
+            if (alvopontos.length>=1) {
+                alvopontos[0] = 1;
+            } else {
+                System.out.println("Sasuke: 0\nItachi: 0\nOs Uchihas nem sao tao bons mesmo");
             }
-
-            else {
-                nvip = Integer.parseInt(tipo);
-
-                if (movimentacao.equals("Entraram")) {
-                    while (lotacao>pessoas) {
-                        nvip--;
-                        pessoas++;
-                        nvipentrou++;
-                    }
-                    while ((pessoas+nvip)>lotacao) {
-                        nvip--;
-                        fila++;
-                    }
-                    if (lotacao>=pessoas && nvipentrou>0) {
-                        System.out.println(nvipentrou+" pessoas entraram na casa. Atualmente ha "+pessoas+" pessoas no evento.");
-                        nvipentrou=0;
-                    }
-                    if (lotacao>=pessoas && (pessoas+fila)>lotacao) {
-                        System.out.println("Infelizmente a casa esta lotada, " + fila + " pessoas foram redirecionadas para a fila.");
-                        if (lotacao == pessoas) {
-                            System.out.println("A fila agora contem " + fila + " pessoas.");
-                        }
-                    }
-                     else if ((pessoas+fila)>lotacao){
-                        System.out.println("Infelizmente a casa esta lotada, "+fila+" pessoas foram redirecionadas para a fila.");
-                        if (lotacao==pessoas) {
-                            System.out.println("A fila agora contem "+fila+" pessoas.");
-                        }
-                    }
-                }
-
-                else {
-                    pessoas-=nvip;
-                    System.out.println(nvip+" pessoas sairam da casa. Atualmente ha "+pessoas+" pessoas no evento.");
-                    if (fila>0) {
-                        while (fila>0 && lotacao>pessoas) {
-                            filaentrou++;
-                            fila--;
-                            pessoas++;
-                        } System.out.println(filaentrou+" pessoas da fila entraram na casa.");
-                        filaentrou=0;
-                    } if (fila==0) {
-                        System.out.println("Todos que estavam na fila de espera conseguiram entrar, atualmente nao ha fila de espera.");
+            for (int i = 1; i < tamanhoalvo; i++) {
+                if (tamanhoalvo % 2 == 0) {
+                    if (i < tamanhoalvo / 2) {
+                        alvopontos[i] = 1 + alvopontos[i - 1];
+                    } else if (i == tamanhoalvo / 2) {
+                        alvopontos[i] = alvopontos[i - 1];
                     } else {
-                        System.out.println("A fila agora contem "+fila+" pessoas.");
+                        alvopontos[i] = alvopontos[i - 1] - 1;
+                    }
+                } else {
+                    if (i < (tamanhoalvo + 1) / 2) {
+                        alvopontos[i] = 1 + alvopontos[i - 1];
+                    } else {
+                        alvopontos[i] = alvopontos[i - 1] - 1;
+                    }
+                }
+            }
+            if (alvopontos.length>=1) {
+                int kunais = Integer.parseInt(in.nextLine());
+                int[] sasukeacerto = new int[kunais];
+                int[] itachiacerto = new int[kunais];
+                int sasukepontos = 0;
+                int itachipontos = 0;
+
+                for (int i = 0; i < kunais; i++) {
+                    sasukeacerto[i] = Integer.parseInt(in.next()) - 1;
+                    if (sasukeacerto[i] == -1) {
+                    } else if (sasukeacerto[i] <= alvopontos.length) {
+                        sasukepontos += alvopontos[sasukeacerto[i]];
+                    }
+                }
+                for (int i = 0; i < kunais; i++) {
+                    itachiacerto[i] = Integer.parseInt(in.next()) - 1;
+                    if (itachiacerto[i] == -1) {
+                    } else if (itachiacerto[i] <= alvopontos.length) {
+                        itachipontos += alvopontos[itachiacerto[i]];
                     }
                 }
 
+                System.out.println("Sasuke: " + sasukepontos);
+                System.out.println("Itachi: " + itachipontos);
 
-
-
-            } System.out.print("\n");
-
-
-
-
-
-        } System.out.println("Vai Troinha, agora pede o ubii!");
-
-
-
+                if (sasukepontos > itachipontos) {
+                    System.out.println("Sasuke Uchiha");
+                } else if (itachipontos > sasukepontos) {
+                    System.out.println("Itachi Uchiha");
+                } else if (sasukepontos == itachipontos && sasukepontos != 0) {
+                    System.out.println("O empate nunca existiu, voce esta preso num genjutsu");
+                } else if (sasukepontos == 0 && itachipontos == 0) {
+                    System.out.println("Os Uchihas nem sao tao bons mesmo");
+                }
+                if (itachipontos == 0 && sasukepontos != 0) {
+                    System.out.println("Um genjutsu desse nivel nao funciona em mim");
+                } else if (sasukepontos == 0 && itachipontos != 0) {
+                    System.out.println("Voce e fraco, lhe falta odio");
+                }
+            }
     }
-
 }
